@@ -11,6 +11,13 @@ import java.util.stream.Collectors;
 
 public class MenuServiceImpl implements MenuService {
 
+    /**
+     * For a given List of meals, find all meals that satisfy the predicate fn
+     *
+     * @param meals
+     * @param fn
+     * @return list of found meals
+     */
     private List<Meal> getAllByPredicate(List<Meal> meals, Predicate<Meal> fn){
         return meals.stream().filter(fn).collect(Collectors.toList());
     }
@@ -47,7 +54,7 @@ public class MenuServiceImpl implements MenuService {
      * @return list of found meals
      */
     @Override
-    public List<Meal> findFoodCheaperThanPrice(List<Meal> meals, Integer price) {
+    public List<Meal> findFoodStartingWithName(List<Meal> meals, Integer price) {
         return this.getAllByPredicate(meals,
                 meal -> meal.getPrice() < price);
     }
@@ -74,10 +81,12 @@ public class MenuServiceImpl implements MenuService {
      * @param name  - can be a partial String
      * @return list of found meals
      */
-    // TODO: check if name was wrong in the example
     @Override
-    public List<Meal> findFoodCheaperThanPrice(List<Meal> meals, String name) {
-        return this.getAllByPredicate(meals, meal -> meal.getName().startsWith(name));
+    public List<Meal> findFoodStartingWithName(List<Meal> meals, String name) {
+        // String.startsWith, is case-sensitive and using toLowerCase is wrong
+        // See: https://stackoverflow.com/a/15518878/14731
+        return this.getAllByPredicate(meals, meal ->
+                meal.getName().regionMatches(true, 0, name,0, name.length()));
     }
 
     /**
@@ -102,6 +111,6 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Meal> findFoodExcludingAll(List<Meal> meals, List<Produce> products) {
         // could use Collections.disjoint
-        return this.getAllByPredicate(meals, meal -> meal.getProducts().stream().anyMatch(products::contains));
+        return this.getAllByPredicate(meals, meal -> meal.getProducts().stream().noneMatch(products::contains));
     }
 }
