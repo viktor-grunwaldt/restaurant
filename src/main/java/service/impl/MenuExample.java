@@ -19,6 +19,9 @@ public class MenuExample {
    * @return List of meals that are  of type vegetarian
    */
   public List<Meal> findVegetarianFood(List<Meal> meals) {
+    if (meals == null){
+      throw new NoFoodFoundException();
+    }
     //This is an example
     List<Meal> filteredMeals = new ArrayList<Meal>(); // initialize array
     for (Meal meal : meals) { //create for loop
@@ -32,7 +35,7 @@ public class MenuExample {
       }
     }
 
-    //Hint: this is just an showcase of a custom exception;
+    //Hint: this is just a showcase of a custom exception;
     if(filteredMeals.isEmpty()){
       throw new NoFoodFoundException();
     }

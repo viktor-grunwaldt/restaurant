@@ -66,13 +66,8 @@ class MenuExampleTest {
         menuExample.findVegetarianFood(meals));
   }
 
-  //TODO IMPLEMENT this test doesn't work properly, because java.lang.NullPointerException is being thrown.
-  //TODO IMPLEMENT Modify the code, so that the null will be checked as first operation in method, and in such case
-  // throw new IllegalArgumentException();
-  //TODO IMPLEMENT modify the assertion here.
   @Test
   public void shouldProperlyHandleNullAsInput() {
-
     // given
     List<Meal> meals = null;
     // when
