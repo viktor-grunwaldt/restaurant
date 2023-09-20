@@ -66,7 +66,7 @@ class MenuExampleTest {
         menuExample.findVegetarianFood(meals));
   }
 
-  //TODO IMPLEM NT this test doesnt work properly, because nullpointerexception is being thrown.
+  //TODO IMPLEMENT this test doesn't work properly, because java.lang.NullPointerException is being thrown.
   //TODO IMPLEMENT Modify the code, so that the null will be checked as first operation in method, and in such case
   // throw new IllegalArgumentException();
   //TODO IMPLEMENT modify the assertion here.

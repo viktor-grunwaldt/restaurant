@@ -12,7 +12,6 @@ import service.exception.NoFoodFoundException;
  * This is just a showcase
  */
 public class MenuExample {
-
   /**
    * This is just showcase to tell you how to implement most basic operations in JAVA.
    * In productive apps that Use Spring and JPA, similar functionalities are implemented by writing a proper query.
