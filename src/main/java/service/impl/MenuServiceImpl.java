@@ -4,13 +4,14 @@ import domain.DietType;
 import domain.eto.Meal;
 import domain.eto.Produce;
 import service.api.MenuService;
+import service.exception.NoFoodFoundException;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MenuServiceImpl implements MenuService {
-
     /**
      * For a given List of meals, find all meals that satisfy the predicate fn
      *
@@ -23,6 +24,31 @@ public class MenuServiceImpl implements MenuService {
     }
 
     /**
+     * For a given List of meals, find all meals that satisfy the predicate fn
+     *
+     * @param meals
+     * @param getterNonNull
+     * @param fn
+     * @return list of found meals
+     */
+    private List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
+        if (meals == null) {
+            throw new NoFoodFoundException();
+        }
+         List<Meal> res = meals.stream()
+                .filter(Objects::nonNull)
+                .filter(getterNonNull)
+                .filter(fn)
+                .collect(Collectors.toList());
+         // Throwing errors when list is empty is an antipattern
+         if (res.isEmpty()) {
+             throw new NoFoodFoundException();
+         }
+         return res;
+    }
+
+
+    /**
      * For a given List of meals, find all meals that are of dietType = {@link DietType#VEGETARIAN}.
      * Hint: You can copy the implementation from MenuExample
      *
@@ -30,8 +56,10 @@ public class MenuServiceImpl implements MenuService {
      * @return list of found meals
      */
     @Override
-    public List<Meal> findVegetarianFood(List<Meal> meals) {
-        return this.getAllByPredicate(meals, meal -> meal.getDietType().equals(DietType.VEGETARIAN));
+    public List<Meal>findVegetarianFood (List<Meal> meals) {
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> meal.getDietType() != null,
+                meal -> meal.getDietType().equals(DietType.VEGETARIAN));
     }
 
     /**
@@ -43,7 +71,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Meal> findFoodByType(List<Meal> meals, DietType diet) {
-        return this.getAllByPredicate(meals, meal -> meal.getDietType().equals(diet));
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> meal.getDietType() != null,
+                meal -> meal.getDietType().equals(diet));
     }
 
     /**
@@ -55,7 +85,8 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Meal> findFoodStartingWithName(List<Meal> meals, Integer price) {
-        return this.getAllByPredicate(meals,
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> true,
                 meal -> meal.getPrice() < price);
     }
 
@@ -69,7 +100,8 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Meal> findFoodCheaperWithCalories(List<Meal> meals, Integer minCalories, Integer maxCalories) {
-        return this.getAllByPredicate( meals,
+        return this.getAllByPredicateWithTypeChecking( meals,
+                meal -> true,
                 meal -> minCalories < meal.getCalories() && meal.getCalories() < maxCalories);
     }
 
@@ -85,8 +117,9 @@ public class MenuServiceImpl implements MenuService {
     public List<Meal> findFoodStartingWithName(List<Meal> meals, String name) {
         // String.startsWith, is case-sensitive and using toLowerCase is wrong
         // See: https://stackoverflow.com/a/15518878/14731
-        return this.getAllByPredicate(meals, meal ->
-                meal.getName().regionMatches(true, 0, name,0, name.length()));
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> true,
+                meal -> meal.getName().regionMatches(true, 0, name,0, name.length()));
     }
 
     /**
@@ -98,7 +131,9 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Meal> findFoodContaining(List<Meal> meals, Produce product) {
-        return this.getAllByPredicate(meals, meal -> meal.getProducts().contains(product));
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> meal.getProducts() != null,
+                meal -> meal.getProducts().contains(product));
     }
 
     /**
@@ -111,6 +146,8 @@ public class MenuServiceImpl implements MenuService {
     @Override
     public List<Meal> findFoodExcludingAll(List<Meal> meals, List<Produce> products) {
         // could use Collections.disjoint
-        return this.getAllByPredicate(meals, meal -> meal.getProducts().stream().noneMatch(products::contains));
+        return this.getAllByPredicateWithTypeChecking(meals,
+                meal -> meal.getProducts() != null,
+                meal -> meal.getProducts().stream().noneMatch(products::contains));
     }
 }

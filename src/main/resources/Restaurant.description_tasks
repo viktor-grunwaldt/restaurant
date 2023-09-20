@@ -12,7 +12,7 @@ Podstawowe klasy które istnieją to:
     Serwisy zazwyczaj zawierają logikę biznesową
 6) MenuServiceImpl - aktualnie pusta klasa
 
-Podpowiedź: Użyj CTRL+SHIFT+F aby poprzez pełnotekstowe wyszukiwanie znaleźć bloki o nazwie "Hint" i "TODO"
+Podpowiedź: Użyj CTRL+SHIFT+F aby poprzez pełnotekstowe wyszukiwanie znaleźć bloki o nazwie "Hint" i "TO DO"
 
 Zadania:
 1) MenuServiceImpl:
