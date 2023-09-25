@@ -59,7 +59,7 @@ public class MenuServiceImpl implements MenuService {
     public List<Meal>findVegetarianFood (List<Meal> meals) {
         return this.getAllByPredicateWithTypeChecking(meals,
                 meal -> meal.getDietType() != null,
-                meal -> meal.getDietType().equals(DietType.VEGETARIAN));
+                meal -> meal.getDietType().isEquivalent(DietType.VEGETARIAN));
     }
 
     /**
@@ -73,7 +73,7 @@ public class MenuServiceImpl implements MenuService {
     public List<Meal> findFoodByType(List<Meal> meals, DietType diet) {
         return this.getAllByPredicateWithTypeChecking(meals,
                 meal -> meal.getDietType() != null,
-                meal -> meal.getDietType().equals(diet));
+                meal -> meal.getDietType().isEquivalent(diet));
     }
 
     /**
