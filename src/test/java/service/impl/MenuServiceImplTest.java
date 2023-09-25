@@ -41,15 +41,15 @@ class MenuServiceImplTest {
         // when
         List<Meal> result = menuService.findVegetarianFood(this.meals);
         // then
-        int expectedSize = 1;
+        int expectedSize = 2;
         //HINT: write what result you expect after the method was called
         Assertions.assertNotNull(result);
         Assertions.assertEquals(expectedSize, result.size());
-        Assertions.assertEquals("Salad", result.get(0).getName());
     }
     @Test
     public void throwIfNoVegetarianFoodFound() {
         // see createTestMeals for more context
+        this.meals.remove(1);
         this.meals.remove(1);
         // when
         Assertions.assertThrows(NoFoodFoundException.class, ()-> menuService.findVegetarianFood(this.meals));
@@ -72,10 +72,31 @@ class MenuServiceImplTest {
         List<Meal> result = menuService.findFoodByType(this.meals, DietType.REGULAR);
         // then
         int expectedSize = 1;
-        //HINT: write what result you expect after the method was called
+        // expect
         Assertions.assertNotNull(result);
         Assertions.assertEquals(expectedSize, result.size());
         Assertions.assertEquals("Scrambled Eggs", result.get(0).getName());
+    }
+    @Test
+    public void findFoodByTypeVegetarian() {
+        // when
+        List<Meal> result = menuService.findFoodByType(this.meals, DietType.VEGETARIAN);
+        // then
+        int expectedSize = 2;
+        // expect
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+    }
+    @Test
+    public void findFoodByTypeVegan() {
+        // when
+        List<Meal> result = menuService.findFoodByType(this.meals, DietType.VEGAN);
+        // then
+        int expectedSize = 1;
+        // expect
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Salad", result.get(0).getName());
     }
     @Test
     public void findFoodStartingWithNameWhenInputWasEmpty() {
@@ -143,7 +164,7 @@ class MenuServiceImplTest {
     @Test
     public void findFoodContaining() {
         // when
-        Produce egg = customProduceConstructor("Chicken Eggs", ProductType.EGGS);
+        Produce egg = customProduceConstructor("Oil", ProductType.PLANT_BASED);
         List<Meal> result = menuService.findFoodContaining(this.meals, egg );
         // then
         int expectedSize = 1;
@@ -205,13 +226,25 @@ class MenuServiceImplTest {
                 10,
                 Arrays.asList(
                         customProduceConstructor("Oil", ProductType.PLANT_BASED),
-                        customProduceConstructor("Chicken Eggs", ProductType.EGGS)
+                        customProduceConstructor("Chicken Eggs", ProductType.EGGS),
+                        customProduceConstructor("Bacon", ProductType.MEAT)
                 )
             ));
         meals.add(customMealConstructor(
+                "Cake",
+                500,
+                DietType.VEGETARIAN,
+                50,
+                Arrays.asList(
+                        customProduceConstructor("Flour", ProductType.GRAIN),
+                        customProduceConstructor("Chicken Eggs", ProductType.EGGS),
+                        customProduceConstructor("Milk", ProductType.DAIRY)
+                )
+        ));
+        meals.add(customMealConstructor(
                 "Salad",
                 250,
-                DietType.VEGETARIAN,
+                DietType.VEGAN,
                 25,
                 Arrays.asList(
                         customProduceConstructor("Lettuce", ProductType.VEGETABLE),
