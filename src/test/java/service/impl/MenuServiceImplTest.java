@@ -19,7 +19,7 @@ class MenuServiceImplTest {
 
     // I'd rather use @BeforeAll, but that would require me to define lifetime of this test class
     @BeforeEach
-    private void setup(){
+    public void setup(){
         this.menuService = new MenuServiceImpl();
         this.meals = createTestMeals();
     }
@@ -66,11 +66,16 @@ class MenuServiceImplTest {
     public void findFoodByTypeHandleNullAsInput() {
         Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodByType(null, DietType.REGULAR));
     }
-    // TODO: impl me
     @Test
     public void findFoodByType() {
-        List<Meal> meals = createTestMeals();
-    
+        // when
+        List<Meal> result = menuService.findFoodByType(this.meals, DietType.REGULAR);
+        // then
+        int expectedSize = 1;
+        //HINT: write what result you expect after the method was called
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Scrambled Eggs", result.get(0).getName());
     }
     @Test
     public void findFoodStartingWithNameWhenInputWasEmpty() {
@@ -85,10 +90,16 @@ class MenuServiceImplTest {
         Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodStartingWithName(null, "Salad"));
     }
 
-    // TODO: impl me
     @Test
     public void findFoodStartingWithName() {
-
+        // when
+        List<Meal> result = menuService.findFoodStartingWithName(this.meals, "Sala");
+        // then
+        int expectedSize = 1;
+        //HINT: write what result you expect after the method was called
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Salad", result.get(0).getName());
     }
     @Test
     public void findFoodCheaperWithCaloriesWhenInputWasEmpty() {
@@ -103,9 +114,16 @@ class MenuServiceImplTest {
         Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodCheaperWithCalories(null, 0, 500));
     }
 
-    // TODO: impl me
     @Test
     public void findFoodCheaperWithCalories() {
+        // when
+        List<Meal> result = menuService.findFoodCheaperWithCalories(this.meals, 0,251);
+        // then
+        int expectedSize = 1;
+        //HINT: write what result you expect after the method was called
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Salad", result.get(0).getName());
     }
     @Test
     public void findFoodContainingWhenInputWasEmpty() {
@@ -122,9 +140,17 @@ class MenuServiceImplTest {
         Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodContaining(null, produce));
     }
 
-    // TODO: impl me
     @Test
     public void findFoodContaining() {
+        // when
+        Produce egg = customProduceConstructor("Chicken Eggs", ProductType.EGGS);
+        List<Meal> result = menuService.findFoodContaining(this.meals, egg );
+        // then
+        int expectedSize = 1;
+        //HINT: write what result you expect after the method was called
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Scrambled Eggs", result.get(0).getName());
     }
     @Test
     public void findFoodExcludingAllWhenInputWasEmpty() {
@@ -141,9 +167,19 @@ class MenuServiceImplTest {
         Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodExcludingAll(null, productBlacklist));
     }
 
-    // TODO: impl me
     @Test
     public void findFoodExcludingAll() {
+        // when
+        Produce egg = customProduceConstructor("Chicken Eggs", ProductType.EGGS);
+        List<Produce> blacklist = new ArrayList<>();
+        blacklist.add(egg);
+        List<Meal> result = menuService.findFoodExcludingAll(this.meals, blacklist);
+        // then
+        int expectedSize = 1;
+        //HINT: write what result you expect after the method was called
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Salad", result.get(0).getName());
     }
     private Meal customMealConstructor(String name, int calories, DietType dietType, int price, List<Produce> products){
         Meal meal = new Meal();
@@ -169,7 +205,7 @@ class MenuServiceImplTest {
                 10,
                 Arrays.asList(
                         customProduceConstructor("Oil", ProductType.PLANT_BASED),
-                        customProduceConstructor("Chicker Eggs", ProductType.EGGS)
+                        customProduceConstructor("Chicken Eggs", ProductType.EGGS)
                 )
             ));
         meals.add(customMealConstructor(
