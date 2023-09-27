@@ -15,10 +15,11 @@ public class MenuServiceImpl implements MenuService {
     /**
      * For a given List of meals, find all meals that satisfy the predicate fn
      *
-     * @param meals
-     * @param fn
+     * @param meals list of meals to search from
+     * @param fn predicate function to filter with
      * @return list of found meals
      */
+    @SuppressWarnings("unused")
     private List<Meal> getAllByPredicate(List<Meal> meals, Predicate<Meal> fn){
         return meals.stream().filter(fn).collect(Collectors.toList());
     }
@@ -26,9 +27,9 @@ public class MenuServiceImpl implements MenuService {
     /**
      * For a given List of meals, find all meals that satisfy the predicate fn
      *
-     * @param meals
-     * @param getterNonNull
-     * @param fn
+     * @param meals list of meals to search from
+     * @param getterNonNull predicate function to check whether getter returns null
+     * @param fn predicate function to filter with
      * @return list of found meals
      */
     private List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
@@ -50,9 +51,7 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * For a given List of meals, find all meals that are of dietType = {@link DietType#VEGETARIAN}.
-     * Hint: You can copy the implementation from MenuExample
-     *
-     * @param meals
+     * @param meals list of meals to search from
      * @return list of found meals
      */
     @Override
@@ -64,9 +63,8 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * For a given List of meals, find all meals that are of certain dietType
-     *
-     * @param meals
-     * @param diet
+     * @param meals list of meals to search from
+     * @param diet diet type to filter with
      * @return list of found meals
      */
     @Override
@@ -78,13 +76,12 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * For a given List of meals return meals that cost less than given parameter.
-     *
-     * @param meals
-     * @param price
+     * @param meals list of meals to search from
+     * @param price upper boundary of the prices of found meals
      * @return list of found meals
      */
     @Override
-    public List<Meal> findFoodStartingWithName(List<Meal> meals, Integer price) {
+    public List<Meal> findFoodCheaperThan(List<Meal> meals, Integer price) {
         return this.getAllByPredicateWithTypeChecking(meals,
                 meal -> true,
                 meal -> meal.getPrice() < price);
@@ -92,14 +89,13 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * For a given List of meals return meals that have calorie intake between two values
-     *
-     * @param meals
-     * @param minCalories
-     * @param maxCalories
+     * @param meals list of meals to search from
+     * @param minCalories lower boundary of the prices of found meals
+     * @param maxCalories upper boundary of the prices of found meals
      * @return list of found meals
      */
     @Override
-    public List<Meal> findFoodCheaperWithCalories(List<Meal> meals, Integer minCalories, Integer maxCalories) {
+    public List<Meal> findFoodWithCalories(List<Meal> meals, Integer minCalories, Integer maxCalories) {
         return this.getAllByPredicateWithTypeChecking( meals,
                 meal -> true,
                 meal -> minCalories < meal.getCalories() && meal.getCalories() < maxCalories);
@@ -108,8 +104,7 @@ public class MenuServiceImpl implements MenuService {
     /**
      * For a given List of meals return meals that name starts with a String. This method ignores character case when
      * searching.
-     *
-     * @param meals
+     * @param meals list of meals to search from
      * @param name  - can be a partial String
      * @return list of found meals
      */
@@ -124,8 +119,7 @@ public class MenuServiceImpl implements MenuService {
 
     /**
      * For a given List of meals return meals that does contain certain product
-     *
-     * @param meals
+     * @param meals list of meals to search from
      * @param product product that is in the meal
      * @return list of found meals
      */
@@ -139,7 +133,7 @@ public class MenuServiceImpl implements MenuService {
     /**
      * For a given List of meals return meals that does not contain any of the products
      *
-     * @param meals
+     * @param meals list of meals to search from
      * @param products that should be excluded from the menu
      * @return list of found meals
      */

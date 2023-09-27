@@ -122,23 +122,48 @@ class MenuServiceImplTest {
         Assertions.assertEquals(expectedSize, result.size());
         Assertions.assertEquals("Salad", result.get(0).getName());
     }
+
     @Test
-    public void findFoodCheaperWithCaloriesWhenInputWasEmpty() {
+    public void findFoodCheaperThanWhenInputWasEmpty() {
         //given
         List<Meal> meals = new ArrayList<>();
         // when
         // then
-        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodCheaperWithCalories(meals, 0, 500));
+        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodCheaperThan(meals, 0));
     }
     @Test
-    public void findFoodCheaperWithCaloriesHandleNullAsInput() {
-        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodCheaperWithCalories(null, 0, 500));
+    public void findFoodCheaperThanHandleNullAsInput() {
+        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodCheaperThan(null, 0));
     }
 
     @Test
-    public void findFoodCheaperWithCalories() {
+    public void findFoodCheaperThan() {
         // when
-        List<Meal> result = menuService.findFoodCheaperWithCalories(this.meals, 0,251);
+        List<Meal> result = menuService.findFoodCheaperThan(this.meals, 11);
+        // then
+        int expectedSize = 1;
+        // expect
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(expectedSize, result.size());
+        Assertions.assertEquals("Scrambled Eggs", result.get(0).getName());
+    }
+    @Test
+    public void findFoodWithCaloriesWhenInputWasEmpty() {
+        //given
+        List<Meal> meals = new ArrayList<>();
+        // when
+        // then
+        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodWithCalories(meals, 0, 500));
+    }
+    @Test
+    public void findFoodWithCaloriesHandleNullAsInput() {
+        Assertions.assertThrows(NoFoodFoundException.class, ()->menuService.findFoodWithCalories(null, 0, 500));
+    }
+
+    @Test
+    public void findFoodWithCalories() {
+        // when
+        List<Meal> result = menuService.findFoodWithCalories(this.meals, 0,251);
         // then
         int expectedSize = 1;
         //HINT: write what result you expect after the method was called
