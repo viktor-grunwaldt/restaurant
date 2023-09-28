@@ -110,7 +110,7 @@ public class MenuServiceImpl implements MenuService {
      */
     @Override
     public List<Meal> findFoodStartingWithName(List<Meal> meals, String name) {
-        // String.startsWith, is case-sensitive and using toLowerCase is wrong
+        // String.startsWith, is case-sensitive and using toLowerCase is bad practice
         // See: https://stackoverflow.com/a/15518878/14731
         return this.getAllByPredicateWithTypeChecking(meals,
                 meal -> true,

@@ -1,5 +1,7 @@
 package domain.eto;
 
+import service.exception.NoFoodFoundException;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,6 +26,16 @@ public class Storage {
         }
         this.storage.put(query, val+1);
         return val+1;
+    }
+
+    public void setProduct(Produce query, Integer value) {
+        if(query == null || value == null){
+            throw new NoFoodFoundException();
+        }
+        if (value < 1){
+            throw new IllegalArgumentException();
+        }
+        this.storage.put(query, value);
     }
 
     public boolean containsEnoughProduct(Map.Entry<Produce, Long> query){
