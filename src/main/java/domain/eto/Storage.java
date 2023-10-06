@@ -41,4 +41,24 @@ public class Storage {
     public boolean containsEnoughProduct(Map.Entry<Produce, Long> query){
         return this.storage.getOrDefault(query.getKey(),0) >= query.getValue();
     }
+
+    public static class CommonStorage extends Storage{
+        public static boolean checkInStorage(Produce produce){
+            // Not Implemented
+            return false;
+        }
+        public static void addToStorage(Produce produce, Integer quantity){
+            // Not Implemented
+            return ;
+        }
+
+        public static void removeFromStorage(Produce produce, Integer quantity){
+            // Not Implemented
+            return ;
+        }
+        public static void clearStorage(){
+            // Not Implemented
+            return ;
+        }
+    }
 }
