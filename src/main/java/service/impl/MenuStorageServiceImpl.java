@@ -1,16 +1,53 @@
 package service.impl;
 
-import domain.DietType;
 import domain.eto.Meal;
-import domain.eto.Produce;
+import domain.eto.Storage;
+import helpers.VoidSupplier;
+import service.exception.NoFoodFoundException;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class MenuStorageServiceImpl extends MenuServiceImpl{
-    private boolean canMealBePreparedFromProductsInCommonStorage(){
-        // Not Implemented
-        return false;
-
+    private void canMealBePreparedFromProductsInCommonStorage(Meal meal){
+        if (meal == null){
+            throw new NoFoodFoundException();
+        }
+        boolean result = meal
+                .getProducts()
+                .stream()
+                .allMatch(Storage.CommonStorage::checkInStorage);
+        if (!result) {
+            throw new NoFoodFoundException();
+        }
+    }
+    private boolean isThrowingAnException(VoidSupplier voidSupplier){
+        try {
+            voidSupplier.get();
+            return true;
+        } catch (Exception e){
+            return false;
+        }
+    }
+    /**
+     * For a given List of meals, find all meals that satisfy the predicate fn
+     * This function will also query the contents of CommonStorage to verify whether there are enough
+     * ingredients to create each meal.
+     * @param meals list of meals to search from
+     * @param getterNonNull predicate function to check whether getter returns null
+     * @param fn predicate function to filter with
+     * @return list of found meals
+     */
+    @Override
+    protected List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull , Predicate<Meal> fn){
+        List<Meal> res = super.getAllByPredicateWithTypeChecking(meals, getterNonNull ,fn);
+        Predicate<Meal> canMealBePrepared = (Meal m) -> isThrowingAnException(()->canMealBePreparedFromProductsInCommonStorage(m));
+        List<Meal> preparableMeals =  res.stream().filter(canMealBePrepared).collect(Collectors.toList());
+        if (preparableMeals.isEmpty()){
+            throw new NoFoodFoundException();
+        }
+        return preparableMeals;
     }
     // Nadpisz wszystkie metody z MenuServiceImpl, i w ciałach tych metod
     // wywołaj ich metody z superklasy (słowo kluczowe super),
@@ -18,75 +55,4 @@ public class MenuStorageServiceImpl extends MenuServiceImpl{
     // używając canMealBePreparedFromProductsInCommonStorage.
     // Napisz Testy jednostkowe używając pomocniczo metody z adnotacją @beforeeach.
     // W tej metodzie uzupełnij CommonStorage odpowiednimi produktami.
-    /**
-     * For a given List of meals, find all meals that are of dietType = {@link DietType#VEGETARIAN}.
-     * @param meals list of meals to search from
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findVegetarianFood (List<Meal> meals) {
-    }
-
-    /**
-     * For a given List of meals, find all meals that are of certain dietType
-     * @param meals list of meals to search from
-     * @param diet diet type to filter with
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodByType(List<Meal> meals, DietType diet) {
-    }
-
-    /**
-     * For a given List of meals return meals that cost less than given parameter.
-     * @param meals list of meals to search from
-     * @param price upper boundary of the prices of found meals
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodCheaperThan(List<Meal> meals, Integer price) {
-    }
-
-    /**
-     * For a given List of meals return meals that have calorie intake between two values
-     * @param meals list of meals to search from
-     * @param minCalories lower boundary of the prices of found meals
-     * @param maxCalories upper boundary of the prices of found meals
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodWithCalories(List<Meal> meals, Integer minCalories, Integer maxCalories) {
-    }
-
-    /**
-     * For a given List of meals return meals that name starts with a String. This method ignores character case when
-     * searching.
-     * @param meals list of meals to search from
-     * @param name  - can be a partial String
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodStartingWithName(List<Meal> meals, String name) {
-    }
-
-    /**
-     * For a given List of meals return meals that does contain certain product
-     * @param meals list of meals to search from
-     * @param product product that is in the meal
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodContaining(List<Meal> meals, Produce product) {
-    }
-
-    /**
-     * For a given List of meals return meals that does not contain any of the products
-     *
-     * @param meals list of meals to search from
-     * @param products that should be excluded from the menu
-     * @return list of found meals
-     */
-    @Override
-    public List<Meal> findFoodExcludingAll(List<Meal> meals, List<Produce> products) {
-    }
 }

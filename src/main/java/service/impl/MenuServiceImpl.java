@@ -32,7 +32,7 @@ public class MenuServiceImpl implements MenuService {
      * @param fn predicate function to filter with
      * @return list of found meals
      */
-    private List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
+    protected List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
         if (meals == null) {
             throw new NoFoodFoundException();
         }

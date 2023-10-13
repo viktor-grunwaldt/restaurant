@@ -42,23 +42,27 @@ public class Storage {
         return this.storage.getOrDefault(query.getKey(),0) >= query.getValue();
     }
 
-    public static class CommonStorage extends Storage{
+    public static class CommonStorage{
+        private static Storage storage = new Storage();
         public static boolean checkInStorage(Produce produce){
-            // Not Implemented
-            return false;
+            return storage.getProductCount(produce)>0;
         }
         public static void addToStorage(Produce produce, Integer quantity){
-            // Not Implemented
-            return ;
+            storage.setProduct(produce, quantity);
         }
 
         public static void removeFromStorage(Produce produce, Integer quantity){
             // Not Implemented
-            return ;
+            try {
+                int count = storage.getProductCount(produce);
+                storage.setProduct(produce, count - quantity);
+            } catch (IllegalArgumentException e) {
+                // I don't know how to handle it properly
+                throw new IllegalArgumentException("tried to remove too many products");
+            }
         }
         public static void clearStorage(){
-            // Not Implemented
-            return ;
+            storage = new Storage();
         }
     }
 }
