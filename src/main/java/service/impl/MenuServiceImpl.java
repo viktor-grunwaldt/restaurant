@@ -48,7 +48,6 @@ public class MenuServiceImpl implements MenuService {
          return res;
     }
 
-
     /**
      * For a given List of meals, find all meals that are of dietType = {@link DietType#VEGETARIAN}.
      * @param meals list of meals to search from

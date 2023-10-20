@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class MenuStorageServiceImpl extends MenuServiceImpl{
+public class MenuStorageServiceImpl extends MenuServiceImpl {
     private void canMealBePreparedFromProductsInCommonStorage(Meal meal){
         if (meal == null){
             throw new NoFoodFoundException();

@@ -7,15 +7,17 @@ import domain.eto.Produce;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.api.MenuService;
 import service.exception.NoFoodFoundException;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+import static service.impl.TestHelper.*;
+
 class MenuServiceImplTest {
-    private MenuServiceImpl menuService;
-    private List<Meal> meals;
+    protected MenuService menuService;
+    protected List<Meal> meals;
 
     // I'd rather use @BeforeAll, but that would require me to define lifetime of this test class
     @BeforeEach
@@ -227,58 +229,4 @@ class MenuServiceImplTest {
         Assertions.assertEquals(expectedSize, result.size());
         Assertions.assertEquals("Salad", result.get(0).getName());
     }
-    private Meal customMealConstructor(String name, int calories, DietType dietType, int price, List<Produce> products){
-        Meal meal = new Meal();
-        meal.setName(name);
-        meal.setCalories(calories);
-        meal.setDietType(dietType);
-        meal.setPrice(price);
-        meal.setProducts(products);
-        return meal;
-    }
-    private Produce customProduceConstructor(String name, ProductType productType){
-        Produce produce = new Produce();
-        produce.setName(name);
-        produce.setProductType(productType);
-        return produce;
-    }
-    private List<Meal> createTestMeals() {
-        List<Meal> meals = new ArrayList<>();
-        meals.add(customMealConstructor(
-                "Scrambled Eggs",
-                300,
-                DietType.REGULAR,
-                10,
-                Arrays.asList(
-                        customProduceConstructor("Oil", ProductType.PLANT_BASED),
-                        customProduceConstructor("Chicken Eggs", ProductType.EGGS),
-                        customProduceConstructor("Bacon", ProductType.MEAT)
-                )
-            ));
-        meals.add(customMealConstructor(
-                "Cake",
-                500,
-                DietType.VEGETARIAN,
-                50,
-                Arrays.asList(
-                        customProduceConstructor("Flour", ProductType.GRAIN),
-                        customProduceConstructor("Chicken Eggs", ProductType.EGGS),
-                        customProduceConstructor("Milk", ProductType.DAIRY)
-                )
-        ));
-        meals.add(customMealConstructor(
-                "Salad",
-                250,
-                DietType.VEGAN,
-                25,
-                Arrays.asList(
-                        customProduceConstructor("Lettuce", ProductType.VEGETABLE),
-                        customProduceConstructor("Tomato", ProductType.VEGETABLE),
-                        customProduceConstructor("Cucumber", ProductType.VEGETABLE)
-                )
-        ));
-        return meals;
-    }
-
-
 }
