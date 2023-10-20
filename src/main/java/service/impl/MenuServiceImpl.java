@@ -32,7 +32,7 @@ public class MenuServiceImpl implements MenuService {
      * @param fn predicate function to filter with
      * @return list of found meals
      */
-    private List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
+    protected List<Meal> getAllByPredicateWithTypeChecking(List<Meal> meals, Predicate<Meal> getterNonNull ,  Predicate<Meal> fn){
         if (meals == null) {
             throw new NoFoodFoundException();
         }
@@ -47,7 +47,6 @@ public class MenuServiceImpl implements MenuService {
          }
          return res;
     }
-
 
     /**
      * For a given List of meals, find all meals that are of dietType = {@link DietType#VEGETARIAN}.

@@ -11,7 +11,9 @@ import org.junit.jupiter.api.Test;
 import service.exception.NoFoodFoundException;
 
 import java.util.Arrays;
-import java.util.List;
+
+import static service.impl.TestHelper.customMealConstructor;
+import static service.impl.TestHelper.customProduceConstructor;
 
 public class StorageServiceImplTest {
 
@@ -21,26 +23,11 @@ public class StorageServiceImplTest {
 
     private Meal exampleMeal;
 
-    private Produce customProduceConstructor(String name, ProductType productType){
-        Produce produce = new Produce();
-        produce.setName(name);
-        produce.setProductType(productType);
-        return produce;
-    }
-    private Meal customMealConstructor(String name, int calories, DietType dietType, int price, List<Produce> products){
-        Meal meal = new Meal();
-        meal.setName(name);
-        meal.setCalories(calories);
-        meal.setDietType(dietType);
-        meal.setPrice(price);
-        meal.setProducts(products);
-        return meal;
-    }
     @BeforeEach
     public void setup(){
         this.storageService = new StorageServiceImpl();
         this.storage = new Storage();
-        Produce egg = customProduceConstructor("Chicken egg", ProductType.EGGS);
+        Produce egg = customProduceConstructor("Chicken eggs", ProductType.EGGS);
         Produce bacon = customProduceConstructor("Bacon", ProductType.MEAT);
         Produce oil = customProduceConstructor("Oil", ProductType.PLANT_BASED);
         this.exampleMeal = customMealConstructor(
@@ -82,7 +69,7 @@ public class StorageServiceImplTest {
 
     @Test
     public void canMealBePreparedFromProductsWithDuplicates() {
-        Produce egg = customProduceConstructor("Chicken egg", ProductType.EGGS);
+        Produce egg = customProduceConstructor("Chicken eggs", ProductType.EGGS);
         Produce bacon = customProduceConstructor("Bacon", ProductType.MEAT);
         Produce oil = customProduceConstructor("Oil", ProductType.PLANT_BASED);
         Meal eggyEggs = customMealConstructor(
@@ -99,7 +86,7 @@ public class StorageServiceImplTest {
     @Test
     public void canMealBePreparedFromProductsTooManyProducts() {
         // given
-        Produce egg = customProduceConstructor("Chicken egg", ProductType.EGGS);
+        Produce egg = customProduceConstructor("Chicken eggs", ProductType.EGGS);
         Produce bacon = customProduceConstructor("Bacon", ProductType.MEAT);
         Produce oil = customProduceConstructor("Oil", ProductType.PLANT_BASED);
         Meal largeMeal = customMealConstructor(
@@ -122,7 +109,7 @@ public class StorageServiceImplTest {
     @Test
     public void canMealBePreparedFromProductsProductNotInStorage() {
         // given
-        Produce egg = customProduceConstructor("Ostrich egg", ProductType.EGGS);
+        Produce egg = customProduceConstructor("Ostrich eggs", ProductType.EGGS);
         Produce bacon = customProduceConstructor("Bacon", ProductType.MEAT);
         Produce oil = customProduceConstructor("Oil", ProductType.PLANT_BASED);
         Meal australianMeal = customMealConstructor(
